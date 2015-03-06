@@ -1,5 +1,5 @@
 #OpInsights MP Samples
-This repo contains sample management packs for System Center Operations Manager. These management pack samples illustrate collection rules that allow sending various data to Azure Operational Insights through.
+This repo contains sample management packs for System Center Operations Manager. These management pack samples illustrate collection rules that allow sending various data to Azure Operational Insights.
 
 ###OpInsights.Custom.Log.Test.Rules.xml 
 This contains collection rules for text log files to be sent as Type=Event. Sample for this blog post http://blogs.technet.com/b/momteam/archive/2015/03/06/collecting-text-log-files-to-azure-operational-insights-using-system-center-operations-manager.aspx
