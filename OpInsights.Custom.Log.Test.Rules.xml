@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="1.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity>
+      <ID>OpInsights.Custom.Log.Test.Rules</ID>
+      <Version>1.0.0.5</Version>
+    </Identity>
+    <Name>OpInsights Custom Log Test Rules</Name>
+    <References>
+      <Reference Alias="SystemCenter">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="MicrosoftWindowsLibrary7585010">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SystemLibrary7585010">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="AppLog">
+        <ID>System.ApplicationLog.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="IPTypes">
+        <ID>Microsoft.IntelligencePacks.Types</ID>
+        <Version>7.0.9802.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <Monitoring>
+    <Rules>
+      <Rule ID="MomUIGeneratedRuledc3f1e40e7d54c5a82e408523d686031" Enabled="true" Target="MicrosoftWindowsLibrary7585010!Microsoft.Windows.Computer" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>EventCollection</Category>
+        <DataSources>
+          <DataSource ID="LogDS" TypeID="AppLog!System.ApplicationLog.GenericLog.FilteredEventProvider">
+            <LogFileDirectory>c:\Logs\</LogFileDirectory>
+            <LogFilePattern>Test*.log</LogFilePattern>
+            <LogIsUTF8>false</LogIsUTF8>
+            <Expression>
+              <RegExExpression>
+                <ValueExpression>
+                  <XPathQuery Type="String">Params/Param[1]</XPathQuery>
+                </ValueExpression>
+                <Operator>MatchesWildcard</Operator>
+                <Pattern>*</Pattern>
+              </RegExExpression>
+            </Expression>
+          </DataSource>
+        </DataSources>
+		<ConditionDetection ID="Mapper" TypeID="SystemLibrary7585010!System.Event.GenericDataMapper">
+			<EventOriginId>$Target/Id$</EventOriginId>
+			<PublisherId>$MPElement$</PublisherId>
+			<PublisherName>GenericLog</PublisherName>
+			<Channel>$Data/EventData/DataItem/LogFileName$</Channel>
+			<LoggingComputer>$Target/Property[Type='MicrosoftWindowsLibrary7585010!Microsoft.Windows.Computer']/PrincipalName$</LoggingComputer>
+            <EventNumber>0</EventNumber>
+            <EventCategory>3</EventCategory>
+            <EventLevel>0</EventLevel>
+			<UserName></UserName>
+			<Description>$Data/EventData/DataItem/Params/Param[1]$</Description>
+			<Params />
+		</ConditionDetection>
+        <WriteActions>
+          <WriteAction ID="HttpWA" TypeID="IPTypes!Microsoft.SystemCenter.CollectCloudGenericEvent" />
+        </WriteActions>
+      </Rule>
+    </Rules>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="false">
+      <DisplayStrings>
+        <DisplayString ElementID="OpInsights.Custom.Log.Test.Rules">
+          <Name>OpInsights Custom Log Test Rules</Name>
+        </DisplayString>
+        <DisplayString ElementID="MomUIGeneratedRuledc3f1e40e7d54c5a82e408523d686031">
+          <Name>Collect C:\Logs\Test*.Log</Name>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
