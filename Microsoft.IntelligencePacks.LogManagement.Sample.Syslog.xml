@@ -1,1 +1,100 @@
-Enter file contents here
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity>
+      <ID>Microsoft.IntelligencePacks.LogManagement.Sample.Syslog</ID>
+      <Version>2.0.0.1</Version>
+    </Identity>
+    <Name>Microsoft.IntelligencePacks.LogManagement.Sample.Syslog</Name>
+    <References>
+      <Reference Alias="ApplicationLog">
+        <ID>System.ApplicationLog.Library</ID>
+        <Version>7.0.8432.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Windows">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="IPTypes">
+        <ID>Microsoft.IntelligencePacks.Types</ID>
+        <Version>7.0.9334.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8432.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Health">
+        <ID>System.Health.Library</ID>
+        <Version>7.0.8432.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <Monitoring>
+    <Rules>
+      <Rule ID="Microsoft.IntelligencePacks.LogManagement.Sample.Syslog.CollectSyslogs" Enabled="false" Target="SC!Microsoft.SystemCenter.HealthService" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>EventCollection</Category>
+        <DataSources>
+		  <DataSource ID="SyslogDS" TypeID="ApplicationLog!System.ApplicationLog.SysLog.FilteredEventProvider">
+			<Port>514</Port>
+			<Expression>
+			  <SimpleExpression>
+				<ValueExpression>
+				  <XPathQuery Type="String">Severity</XPathQuery>
+				</ValueExpression>
+				<Operator>LessEqual</Operator>
+				<ValueExpression>
+				  <Value Type="String">5</Value><!-- what is the minimum level to be accepted and sent up to OpInsights -->
+				</ValueExpression>
+			  </SimpleExpression>
+			</Expression>
+		  </DataSource>
+        </DataSources>
+		  <ConditionDetection ID="Mapper" TypeID="System!System.Event.GenericDataMapper">
+			<EventOriginId>$Target/Id$</EventOriginId>
+			<PublisherId>$MPElement$</PublisherId>
+			<PublisherName>$Data/EventData/DataItem/PriorityName$</PublisherName>
+			<Channel>Syslog</Channel>
+			<LoggingComputer>$Data/EventData/DataItem/HostName$</LoggingComputer><!-- SCOM doesn't perform a reverse lookup; this field ends up being the IP address -->
+			<EventNumber>$Data/EventData/DataItem/Severity$</EventNumber>
+			<EventCategory>0</EventCategory>
+			<EventLevel>0</EventLevel>
+			<UserName />
+			<Description>$Data/EventData/DataItem/Message$</Description>
+			<Params />
+		  </ConditionDetection>
+        <WriteActions>
+          <WriteAction ID="HttpWA" TypeID="IPTypes!Microsoft.SystemCenter.CollectCloudGenericEvent" />
+        </WriteActions>
+      </Rule>
+    </Rules>
+    <Overrides>
+      <RulePropertyOverride ID="OverrideForRuleMicrosoftIntelligencePacksLogManagementSampleSyslogCollectSyslogsForContextMicrosoftSystemCenterCollectionManagementServer3a8b2936b60a428fb280bc812a6f250f" Context="SC!Microsoft.SystemCenter.CollectionManagementServer" Enforced="false" Rule="Microsoft.IntelligencePacks.LogManagement.Sample.Syslog.CollectSyslogs" Property="Enabled">
+        <Value>true</Value>
+      </RulePropertyOverride>
+    </Overrides>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Microsoft.IntelligencePacks.LogManagement.Sample.Syslog">
+          <Name>Azure Operational Insights Sample Syslog Collection</Name>
+          <Description>This management pack contains a custom datasource which processes Syslog events with a PowerShell script, and maps parsed properties to generic OpsMgr events. It also contains a custom rule to collect and publish these events to Azure Operational Insights.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Microsoft.IntelligencePacks.LogManagement.Sample.Syslog.CollectSyslogs">
+          <Name>Collect Syslogs to Cloud</Name>
+          <Description>This rule collects processed syslog events from the custom syslog datasource and publishes them.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
