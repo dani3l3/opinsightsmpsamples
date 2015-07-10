@@ -11,3 +11,6 @@ Note - the data source module used to read the logs in this example is a pre-exi
 ####Microsoft.IntelligencePacks.LogManagement.Sample.Syslog.xml
 This example contains a collection rule (to be run on Management Servers) that receives **syslog messages**, maps it a little better in the Event shape, and sends it to OpInsights. This is similar to the example by Michale here http://blogs.technet.com/b/omx/archive/2013/01/07/how-to-store-syslog-in-the-scom-data-warehouse.aspx
 For better mapping you need to use something like the script-based mapper example here http://blogs.technet.com/b/momteam/archive/2014/07/29/how-to-collect-syslog-events-thru-operations-manager-scom-to-advisor-preview.aspx (will move/reconcile the two examples)
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
